@@ -34,7 +34,8 @@ class Game:
 
         self.createGrid()
         self.start = self.grid[0][0]
-        self.end = self.grid[self.width // self.w - 1][self.height // self.w - 1]
+        # self.end = self.grid[self.width // self.w - 1][self.height // self.w - 1]
+        self.end = self.grid[6][3]
         self.openSet.append(self.start)
 
         run = True
@@ -119,18 +120,25 @@ class Game:
         """
         self.screen.fill(black)
 
-        # DrawLoop
+        # Board
         for i in range(self.width // self.w):  # Cols
             for j in range(self.height // self.w):  # Rows
                 self.grid[i][j].show(self.screen, self.w, white)
 
+        # OpenSet
         for i in range(len(self.openSet)):
             self.openSet[i].show(self.screen, self.w, green)
+
+        # ClosedSet
         for i in range(len(self.closedSet)):
             self.closedSet[i].show(self.screen, self.w, red)
 
+        # Path
         for i in range(len(self.path)):
             self.path[i].show(self.screen, self.w, blue)
+
+        self.end.show(self.screen, self.w, yellow)
+        self.start.show(self.screen, self.w, yellow)
 
         pygame.display.flip()
 
