@@ -16,6 +16,7 @@ class Cell:
         self.h = 0
         self.g = 0
         self.neighbors = []
+        self.previous = None
 
     def show(self, screen, w, color):
         """

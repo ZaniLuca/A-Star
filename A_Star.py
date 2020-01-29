@@ -5,6 +5,7 @@ by Luca Zani 28/01/2020
 import pygame
 from Cell import *
 from colors import *
+import math
 
 
 class Game:
@@ -22,6 +23,7 @@ class Game:
         self.end = None  # EndPoint
         self.openSet = []
         self.closedSet = []
+        self.path = []
 
     def run(self):
         """
@@ -42,46 +44,54 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
+            if not self.done:
+                if len(self.openSet) > 0:
+                    best = 0  # Index of the lowest F cell
+                    for i in range(len(self.openSet)):
+                        if self.openSet[i].f < self.openSet[best].f:
+                            best = i
 
-            if len(self.openSet) > 0:
-                best = 0  # Index of the lowest F cell
-                for i in range(len(self.openSet)):
-                    if self.openSet[i].f < self.openSet[best].f:
-                        best = i
+                    current = self.openSet[best]
 
-                current = self.openSet[best]
+                    # Win Condition
+                    if self.openSet[best] == self.end:
+                        temp = current
+                        self.path.append(temp)
+                        while temp.previous:
+                            self.path.append(temp.previous)
+                            temp = temp.previous
 
-                # Win Condition
-                if self.openSet[best] == self.end:
-                    self.done = True
-                    print('Done!')
+                        self.done = True
+                        print('Done!')
 
-                self.openSet.remove(current)  # Potrebbe non andare
-                self.closedSet.append(current)
+                    self.openSet.remove(current)  # Potrebbe non andare
+                    self.closedSet.append(current)
 
-                # Evaluating neighbors
-                for i in range(len(current.neighbors)):
-                    neighbor = current.neighbors[i]
+                    # Evaluating neighbors
+                    for i in range(len(current.neighbors)):
+                        neighbor = current.neighbors[i]
 
-                    if neighbor not in self.closedSet:
-                        temp_g = current.g + 1
+                        if neighbor not in self.closedSet:
+                            temp_g = current.g + 1
 
-                        # Check if i have evaluated the neighbor before
-                        # if so we have a better G score
-                        if neighbor in self.openSet:
-                            if temp_g < neighbor.g:
+                            # Check if i have evaluated the neighbor before
+                            # if so we have a better G score
+                            if neighbor in self.openSet:
+                                if temp_g < neighbor.g:
+                                    neighbor.g = temp_g
+                            # otherwise just give the neighbor the temp_g
+                            else:
                                 neighbor.g = temp_g
-                        # otherwise just give the neighbor the temp_g
-                        else:
-                            neighbor.g = temp_g
-                            self.openSet.append(neighbor)
+                                self.openSet.append(neighbor)
 
-                        neighbor.h = self.heuristic(neighbor)
+                            neighbor.h = self.heuristic(neighbor)
+                            neighbor.f = neighbor.g + neighbor.h
+                            neighbor.previous = current
 
-            else:
-                print('No Solution')
+                else:
+                    pass  # no solution
 
-            self.update()
+                self.update()
 
         pygame.quit()
 
@@ -119,10 +129,20 @@ class Game:
         for i in range(len(self.closedSet)):
             self.closedSet[i].show(self.screen, self.w, red)
 
+        for i in range(len(self.path)):
+            self.path[i].show(self.screen, self.w, blue)
+
         pygame.display.flip()
 
     def heuristic(self, neighbor):
-        pass
+        """
+        Calculate the h cost from the neighbor to the end
+        h cost = distance from neighbir --> end
+        :param neighbor: Cell
+        :return: double
+        """
+        distance = math.sqrt((neighbor.i - self.end.i) ** 2 + (neighbor.j - self.end.j) ** 2)
+        return distance
 
 
 g = Game()
