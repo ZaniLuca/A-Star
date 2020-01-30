@@ -6,6 +6,7 @@ import pygame
 from Cell import *
 from colors import *
 import math
+pygame.init()
 
 
 class Game:
@@ -35,7 +36,7 @@ class Game:
         self.createGrid()
         self.start = self.grid[0][0]
         # self.end = self.grid[self.width // self.w - 1][self.height // self.w - 1]
-        self.end = self.grid[6][3]
+        self.end = self.grid[7][3]
         self.openSet.append(self.start)
 
         run = True
