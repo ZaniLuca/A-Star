@@ -34,11 +34,22 @@ class Cell:
 
     def addNeighbors(self, grid, cols, rows):
 
-        if self.i < cols - 1:
-            self.neighbors.append(grid[self.i + 1][self.j])  # Top
-        if self.j < rows - 1:
-            self.neighbors.append(grid[self.i][self.j + 1])  # Right
-        if self.i > 0:
-            self.neighbors.append(grid[self.i - 1][self.j])  # Bottom
         if self.j > 0:
-            self.neighbors.append(grid[self.i][self.j - 1])  # Left
+            self.neighbors.append(grid[self.i][self.j - 1])  # top
+        if self.i < cols - 1:
+            self.neighbors.append(grid[self.i + 1][self.j])  # right
+        if self.j < rows - 1:
+            self.neighbors.append(grid[self.i][self.j + 1])  # bottom
+        if self.i > 0:
+            self.neighbors.append(grid[self.i - 1][self.j])  # left
+
+        # Diagonals
+
+        if self.i > 0 and self.j > 0:
+            self.neighbors.append(grid[self.i - 1][self.j - 1])  # topleft
+        if self.i > 0 and self.j < rows - 1:
+            self.neighbors.append(grid[self.i - 1][self.j + 1])  # bottomleft
+        if self.i < cols - 1 and self.j > 0:
+            self.neighbors.append(grid[self.i + 1][self.j - 1])  # topright
+        if self.i < cols - 1 and self.j < rows - 1:
+            self.neighbors.append(grid[self.i + 1][self.j + 1])  # bottomright
