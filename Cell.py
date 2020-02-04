@@ -1,5 +1,5 @@
 import pygame
-from colors import *
+from Colors import *
 
 
 class Cell:

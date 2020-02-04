@@ -4,7 +4,7 @@ by Luca Zani 28/01/2020
 """
 import pygame
 from Cell import *
-from colors import *
+from Colors import *
 import math
 pygame.init()
 
@@ -66,7 +66,7 @@ class Game:
                         self.done = True
                         print('Done!')
 
-                    self.openSet.remove(current)  # Potrebbe non andare
+                    self.openSet.remove(current)
                     self.closedSet.append(current)
 
                     # Evaluating neighbors
